@@ -32,7 +32,7 @@ public class LoginController {
     @PostMapping("/login")
     public RespBean login(@RequestBody AdminLoginParam adminLoginParam , HttpServletRequest request){
 
-        return adminService.login(adminLoginParam.getUsername(),adminLoginParam.getPassword(),request);
+        return adminService.login(adminLoginParam.getUsername(),adminLoginParam.getPassword(),adminLoginParam.getCaptcha(),request);
 
     }
 
@@ -53,7 +53,7 @@ public class LoginController {
 
 
 
-    @ApiOperation(value = "登陆之后返回的token")
+    @ApiOperation(value = "登出")
     @PostMapping("/logout")
     public RespBean logout(){
         return RespBean.success("注销成功");
