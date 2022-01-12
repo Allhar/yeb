@@ -3,6 +3,7 @@ package com.allhar.server.service.impl;
 import com.allhar.server.config.security.JwtTokenUtil;
 import com.allhar.server.pojo.Admin;
 import com.allhar.server.mapper.AdminMapper;
+import com.allhar.server.pojo.Menu;
 import com.allhar.server.pojo.RespBean;
 import com.allhar.server.service.IAdminService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -72,8 +74,9 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
         //生成token
         String token = jwtTokenUtil.generateToken(userDetails);
         Map<String,String> tokenMap= new HashMap<>();
-        tokenMap.put("token",token);
         tokenMap.put("tokenHead",tokenHead);
+        tokenMap.put("token",token);
+
         System.out.println(token);
 
         return RespBean.success("登陆成功",tokenMap);
@@ -84,4 +87,7 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     public Admin getAdminByUserName(String username) {
         return adminMapper.selectOne(new QueryWrapper<Admin>().eq("username",username).eq("enabled",true));
     }
+
+
+
 }

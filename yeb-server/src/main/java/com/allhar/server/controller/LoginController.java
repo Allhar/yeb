@@ -8,6 +8,7 @@ import com.allhar.server.service.IAdminService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -32,13 +33,13 @@ public class LoginController {
     @PostMapping("/login")
     public RespBean login(@RequestBody AdminLoginParam adminLoginParam , HttpServletRequest request){
 
-        return adminService.login(adminLoginParam.getUsername(),adminLoginParam.getPassword(),adminLoginParam.getCaptcha(),request);
+        return adminService.login(adminLoginParam.getUsername(),adminLoginParam.getPassword(),adminLoginParam.getCode(),request);
 
     }
 
 
     @ApiOperation(value = "获取当前用户信息")
-    @PostMapping("/admin/info")
+    @GetMapping("/admin/info")
     public Admin getAdminInfo(Principal principal){
 
         if (principal == null){
