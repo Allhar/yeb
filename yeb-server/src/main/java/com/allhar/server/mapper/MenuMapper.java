@@ -16,4 +16,10 @@ import java.util.List;
 public interface MenuMapper extends BaseMapper<Menu> {
 
     List<Menu> getMenusByAdminId(Integer id);
+
+    /**
+     * 根据角色查找菜单列表
+     * @return
+     */
+    List<Menu> getMenusByRole();
 }

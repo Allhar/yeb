@@ -3,6 +3,7 @@ package com.allhar.server.service;
 import com.allhar.server.pojo.Admin;
 import com.allhar.server.pojo.Menu;
 import com.allhar.server.pojo.RespBean;
+import com.allhar.server.pojo.Role;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,5 +23,11 @@ public interface IAdminService extends IService<Admin> {
 
     Admin getAdminByUserName(String username);
 
+    /**
+     * 根据用户id查找角色
+     * @param adminId
+     * @return
+     */
+    List<Role> getRoles(Integer adminId);
 
 }

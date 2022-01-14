@@ -1,10 +1,12 @@
 package com.allhar.server.service.impl;
 
 import com.allhar.server.config.security.JwtTokenUtil;
+import com.allhar.server.mapper.RoleMapper;
 import com.allhar.server.pojo.Admin;
 import com.allhar.server.mapper.AdminMapper;
 import com.allhar.server.pojo.Menu;
 import com.allhar.server.pojo.RespBean;
+import com.allhar.server.pojo.Role;
 import com.allhar.server.service.IAdminService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -15,6 +17,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -44,6 +47,8 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     private JwtTokenUtil jwtTokenUtil;
     @Value("${jwt.tokenHead}")
     private String tokenHead;
+    @Autowired
+    private RoleMapper roleMapper;
     /**
      * 登陆之后返回token
      * @param username
@@ -60,7 +65,12 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
             return RespBean.error("验证码输入错误");
         }
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+        UserDetails userDetails = null;
+        try {
+            userDetails = userDetailsService.loadUserByUsername(username);
+        } catch (UsernameNotFoundException e) {
+            return RespBean.error("用户名或密码不正确");
+        }
         if (null == userDetails || !passwordEncoder.matches(password, userDetails.getPassword())) {
             return RespBean.error("用户名或密码不正确");
         }
@@ -88,6 +98,16 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
         return adminMapper.selectOne(new QueryWrapper<Admin>().eq("username",username).eq("enabled",true));
     }
 
+
+    /**
+     * 根据用户id查找角色
+     * @param adminId
+     * @return
+     */
+    @Override
+    public List<Role> getRoles(Integer adminId) {
+        return roleMapper.getRoles(adminId);
+    }
 
 
 }
