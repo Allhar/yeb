@@ -15,11 +15,39 @@
         <result column="userFace" property="userFace" />
         <result column="remark" property="remark" />
     </resultMap>
+    
+    <resultMap id="adminWithRole" type="com.allhar.server.pojo.Admin" extends="BaseResultMap">
+        <collection property="roles" ofType="com.allhar.server.pojo.Role">
+            <id column="rid" property="id" />
+            <result column="rname" property="name" />
+            <result column="rnameZh" property="nameZh" />
+        </collection>
+    </resultMap>
 
     <!-- 通用查询结果列 -->
     <sql id="Base_Column_List">
         id, name, phone, telephone, address, enabled, username, password, userFace, remark
     </sql>
+
+    <!--查询所有操作员-->
+    <select id="getAllAdmins" resultMap="adminWithRole">
+        select
+            a.*,
+            r.id as rid,
+            r.`name` as rname,
+            r.nameZh as rnameZh
+        from
+            t_admin a
+                left join t_admin_role ar on a.id = ar.adminId
+                left join t_role r on ar.rid = r.id
+        where
+            a.id != #{id}
+            <if test="null!=keyWords and ''!=keyWords">
+                and a.`name` like CONCAT('%',#{keyWords},'%')
+            </if>
+        order by
+            a.id
+    </select>
 
 
 </mapper>

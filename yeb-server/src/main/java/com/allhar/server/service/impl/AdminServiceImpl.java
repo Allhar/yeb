@@ -1,5 +1,6 @@
 package com.allhar.server.service.impl;
 
+import com.allhar.server.AdminUtils;
 import com.allhar.server.config.security.JwtTokenUtil;
 import com.allhar.server.mapper.RoleMapper;
 import com.allhar.server.pojo.Admin;
@@ -107,6 +108,16 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     @Override
     public List<Role> getRoles(Integer adminId) {
         return roleMapper.getRoles(adminId);
+    }
+
+
+    /**
+     * 获取所有操作员
+     * @return
+     */
+    @Override
+    public List<Admin> getAllAdmins(String keyWords) {
+        return adminMapper.getAllAdmins(AdminUtils.getCurrentAdmin().getId() , keyWords);
     }
 
 
