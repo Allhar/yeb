@@ -56,7 +56,7 @@ mybatis-plus:
 # mybatis SQL 打印
 logging:
   level:
-    com.zdy.yeb.mapper: debug
+    com.allhar.server.mapper: debug
 
 jwt:
   # JWT存储的请求头
