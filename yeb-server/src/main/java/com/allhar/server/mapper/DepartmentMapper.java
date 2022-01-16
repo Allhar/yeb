@@ -1,6 +1,7 @@
 package com.allhar.server.mapper;
 
 import com.allhar.server.pojo.Department;
+import com.allhar.server.pojo.RespBean;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 import java.util.List;
@@ -20,4 +21,17 @@ public interface DepartmentMapper extends BaseMapper<Department> {
      * @return
      */
     List<Department> getAllDepartments(Integer parentId);
+
+    /**
+     * 添加部门
+     * @param department
+     * @return
+     */
+    void addDepartment(Department department);
+
+    /**
+     * 删除部门
+     * @param department
+     */
+    void deleteDepartment(Department department);
 }
