@@ -1,5 +1,6 @@
 package com.allhar.server.service.impl;
 
+import com.allhar.server.AdminUtils;
 import com.allhar.server.pojo.Admin;
 import com.allhar.server.pojo.Menu;
 import com.allhar.server.mapper.MenuMapper;
@@ -37,7 +38,7 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IM
      */
     @Override
     public List<Menu> getMenusByAdminId() {
-        Integer adminId = ((Admin) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        Integer adminId = AdminUtils.getCurrentAdmin().getId();
 
         ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
         //从redis获取菜单数据
