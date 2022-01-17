@@ -2,12 +2,10 @@ package com.allhar.server.service.impl;
 
 import com.allhar.server.AdminUtils;
 import com.allhar.server.config.security.JwtTokenUtil;
+import com.allhar.server.mapper.AdminRoleMapper;
 import com.allhar.server.mapper.RoleMapper;
-import com.allhar.server.pojo.Admin;
+import com.allhar.server.pojo.*;
 import com.allhar.server.mapper.AdminMapper;
-import com.allhar.server.pojo.Menu;
-import com.allhar.server.pojo.RespBean;
-import com.allhar.server.pojo.Role;
 import com.allhar.server.service.IAdminService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
@@ -21,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -50,6 +49,8 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     private String tokenHead;
     @Autowired
     private RoleMapper roleMapper;
+    @Autowired
+    private AdminRoleMapper adminRoleMapper;
     /**
      * 登陆之后返回token
      * @param username
@@ -118,6 +119,24 @@ public class AdminServiceImpl extends ServiceImpl<AdminMapper, Admin> implements
     @Override
     public List<Admin> getAllAdmins(String keyWords) {
         return adminMapper.getAllAdmins(AdminUtils.getCurrentAdmin().getId() , keyWords);
+    }
+
+    /**
+     * 更新操作员角色
+     * @param adminId
+     * @param rids
+     * @return
+     */
+    @Override
+    @Transactional
+    public RespBean updateAdminRole(Integer adminId, Integer[] rids) {
+        adminRoleMapper.delete((new QueryWrapper<AdminRole>().eq("adminID",adminId)));
+
+        Integer result = adminRoleMapper.addAdminRole(adminId, rids);
+        if (rids.length==result){
+            return RespBean.success("更新成功");
+        }
+        return RespBean.error("更新失败");
     }
 
 
